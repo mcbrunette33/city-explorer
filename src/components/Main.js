@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Card, Button } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 class Main extends React.Component {
   constructor(props) {
@@ -25,7 +25,8 @@ class Main extends React.Component {
 
   handleExplore = async e => {
     e.preventDefault();
-    let apiUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.LOCATIONAPI}&q=${this.state.location}&format=json`;
+    let apiUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONAPI}&q=${this.state.location}&format=json`;
+    console.log(apiUrl);
     let locationData = await axios.get(apiUrl);
     this.setState({
       locationData: locationData.data[0],
@@ -36,7 +37,7 @@ class Main extends React.Component {
     });
   }
   render() {
-    console.log('this is state', this.state);
+    // console.log('this is state', this.state);
     return (
       <>
         <div>
