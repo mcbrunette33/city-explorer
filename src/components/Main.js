@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Card } from "react-bootstrap";
+import { Card, Button} from "react-bootstrap";
 
 class Main extends React.Component {
   constructor(props) {
@@ -25,6 +25,7 @@ class Main extends React.Component {
 
   handleExplore = async e => {
     e.preventDefault();
+    try{
     let apiUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONAPI}&q=${this.state.location}&format=json`;
     console.log(apiUrl);
     let locationData = await axios.get(apiUrl);
@@ -36,16 +37,21 @@ class Main extends React.Component {
       clickExplore: true
     });
   }
+  catch (error) {
+    this.setState({
+      error: true,
+      errorMessage: `An Error Occurred: ${error.response.status} Unable to find location`
+    });
+  }
+}
   render() {
     // console.log('this is state', this.state);
     return (
       <>
         <div>
-          <form onSubmit={this.handleExplore}>
-            <label className="search-box">
-              Where to?
-              <input type="text" name="location" onInput={this.handleTypeUpdate} />
-            </label>
+          <form onSubmit={this.handleExplore} className="search-box">
+              <input 
+              type="text" name="location" onInput={this.handleTypeUpdate} />
             <button type="submit">Explore</button>
           </form>
         </div>
@@ -69,7 +75,13 @@ class Main extends React.Component {
               Lat: {this.state.locationLat}
             </Card.Text>
           </Card.Body>
-          <Card.Img variant="bottom" src="" />
+          {
+            this.state.clickExplore
+              ?
+              <Card.Img variant="bottom" src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONAPI}&center=${this.state.locationLat},${this.state.locationLon}&zoom=12`} />
+              :
+              <Card.Img variant="bottom" />
+          }
         </Card>
       </>
     );
