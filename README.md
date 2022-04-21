@@ -1,6 +1,6 @@
 # City-Explorer
 
-**Author**: Michael BRunette
+**Author**: Michael Brunette
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
@@ -23,10 +23,36 @@
 
 - Name of feature: City-Explorer
 
-- Estimate of time needed to complete: _____
+- Estimate of time needed to complete: 3hrs
 
-- Start time: _____
+- Start time: dont remember
 
-- Finish time: _____
+- Finish time:dont remember
 
-- Actual time needed to complete: _____
+- Actual time needed to complete: 5 hrs
+
+![wrrc1](./imgs/wrrc1.png)
+
+Name of feature: City-Explorer=API
+
+- Estimate of time needed to complete: 3hrs
+
+- Start time: 1500
+
+- Finish time:dont 2000
+
+- Actual time needed to complete: 5 hr
+
+![wrrc1](./imgs/wrrc1.png)
+
+Name of feature: APIS
+
+- Estimate of time needed to complete: 5hrs
+
+- Start time: 1430
+
+- Finish time:
+
+- Actual time needed to complete: 
+
+![wrrc3](./imgs/wrrc-3%20(1).png)

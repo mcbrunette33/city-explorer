@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { Card, Button} from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
+import Weather from './Weather';
 
 class Main extends React.Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class Main extends React.Component {
       locationLat: 0,
       clickExplore: false,
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      weatherData: [],
+      showweather: false
     }
   }
 
@@ -25,32 +28,41 @@ class Main extends React.Component {
 
   handleExplore = async e => {
     e.preventDefault();
-    try{
-    let apiUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONAPI}&q=${this.state.location}&format=json`;
-    console.log(apiUrl);
-    let locationData = await axios.get(apiUrl);
-    this.setState({
-      locationData: locationData.data[0],
-      locationName: locationData.data[0].display_name,
-      locationLon: locationData.data[0].lon,
-      locationLat: locationData.data[0].lat,
-      clickExplore: true
-    });
+    try {
+      let apiUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONAPI}&q=${this.state.location}&format=json`;
+      // console.log(apiUrl);
+      let locationData = await axios.get(apiUrl);
+      this.setState({
+        locationData: locationData.data[0],
+        locationName: locationData.data[0].display_name,
+        locationLon: locationData.data[0].lon,
+        locationLat: locationData.data[0].lat,
+        clickExplore: true
+      }, async () => {
+        let weatherApiUrl = `${process.env.REACT_APP_SERVER}/weather?lon=${this.state.locationLon}&lat=${this.state.locationLat}`;
+        let weatherData = await axios.get(weatherApiUrl);
+        this.setState({
+          weatherData: weatherData.data,
+          showweather: true
+        })
+
+      });
   }
-  catch (error) {
-    this.setState({
-      error: true,
-      errorMessage: `An Error Occurred: ${error.response.status} Unable to find location`
-    });
+    catch (error) {
+      this.setState({
+        error: true,
+        errorMessage: `An Error Occurred: ${error.response.status} Unable to find location`,
+        showweather: false
+      });
+    }
   }
-}
   render() {
-    // console.log('this is state', this.state);
+    console.log('this is state', this.state);
     return (
       <>
         <div>
           <form onSubmit={this.handleExplore} className="search-box">
-              <input 
+            <input
               type="text" name="location" onInput={this.handleTypeUpdate} />
             <button type="submit">Explore</button>
           </form>
@@ -75,6 +87,10 @@ class Main extends React.Component {
               Lat: {this.state.locationLat}
             </Card.Text>
           </Card.Body>
+         { this.state.showweather &&
+         <Weather weather={this.state.weatherData} />
+         
+  }
           {
             this.state.clickExplore
               ?
