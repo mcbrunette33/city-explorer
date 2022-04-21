@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Card, Button } from "react-bootstrap";
 import Weather from './Weather';
+import Movie from './Movie';
 
 class Main extends React.Component {
   constructor(props) {
@@ -16,7 +17,10 @@ class Main extends React.Component {
       error: false,
       errorMessage: '',
       weatherData: [],
-      showweather: false
+      showweather: false,
+      showmovie: false,
+      movieData: []
+    
     }
   }
 
@@ -44,15 +48,24 @@ class Main extends React.Component {
         this.setState({
           weatherData: weatherData.data,
           showweather: true
-        })
+        }, async () => {
+          let movieApiUrl = `${process.env.REACT_APP_SERVER}/movie?locationCity=${this.state.location}`;
+          let movieData = await axios.get(movieApiUrl);
+          this.setState({
+            movieData: movieData.data,
+            showmovie: true
+          }
+          );
 
+        });
       });
-  }
+    }
     catch (error) {
       this.setState({
         error: true,
         errorMessage: `An Error Occurred: ${error.response.status} Unable to find location`,
-        showweather: false
+        showweather: false,
+        showmovie: false
       });
     }
   }
@@ -64,7 +77,7 @@ class Main extends React.Component {
           <form onSubmit={this.handleExplore} className="search-box">
             <input
               type="text" name="location" onInput={this.handleTypeUpdate} />
-            <button type="submit">Explore</button>
+            <Button type="submit">Explore</Button>
           </form>
         </div>
         <Card
@@ -87,10 +100,14 @@ class Main extends React.Component {
               Lat: {this.state.locationLat}
             </Card.Text>
           </Card.Body>
-         { this.state.showweather &&
-         <Weather weather={this.state.weatherData} />
-         
-  }
+          {this.state.showweather &&
+            <Weather weather={this.state.weatherData} />
+
+          }
+           {this.state.showmovie &&
+            <Movie movie={this.state.movieData} />
+
+          }
           {
             this.state.clickExplore
               ?
